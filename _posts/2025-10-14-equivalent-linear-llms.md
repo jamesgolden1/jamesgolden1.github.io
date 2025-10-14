@@ -4,7 +4,7 @@
 
 ---
 
-[Paper published in Transactions on Machine Learning Research, 10/202](https://openreview.net/forum?id=oDWbJsIuEp) [Arxiv](https://arxiv.org/abs/2505.24293)
+[Paper published in Transactions on Machine Learning Research, 10/2025](https://openreview.net/forum?id=oDWbJsIuEp) [Arxiv](https://arxiv.org/abs/2505.24293)
 
 ## What Are We Trying to Understand?
 
