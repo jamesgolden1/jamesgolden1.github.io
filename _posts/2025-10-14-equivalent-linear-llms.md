@@ -31,7 +31,7 @@ Linear systems are much easier to understand and analyze than nonlinear ones. On
 
 The Jacobian matrix is a fundamental tool from calculus that captures how a function changes. For a model that takes input vectors and produces output vectors, the Jacobian tells us how small changes to the input affect the output.
 
-For a simple function like $f(x, y) = (x^2 + y, xy)$, the Jacobian would be a matrix of all the partial derivatives:
+For a simple function like $f(x, y) = (x^2 + y, xy)$ , the Jacobian would be a matrix of all the partial derivatives:
 
 $$J = \begin{bmatrix} \frac{\partial f_1}{\partial x} & \frac{\partial f_1}{\partial y} \\ \frac{\partial f_2}{\partial x} & \frac{\partial f_2}{\partial y} \end{bmatrix} = \begin{bmatrix} 2x & 1 \\ y & x \end{bmatrix}$$
 
@@ -39,9 +39,9 @@ $$J = \begin{bmatrix} \frac{\partial f_1}{\partial x} & \frac{\partial f_1}{\par
 
 For deep neural networks with activation functions like SwiGLU or GELU, and operations like softmax attention, the regular Jacobian doesn't reconstruct the model output. The paper shows this clearly:
 
-![Reconstruction comparison](images/fig1-qwen3-reconstruction.png)
+![Reconstruction comparison](fig1-qwen3-reconstruction.png)
 
-The blue points show what happens when you use the regular Jacobian—it's way off! The red points show the "detached" Jacobian reconstruction, which perfectly matches the model output.
+The blue points show what happens when you use the regular Jacobian, not even close. The red points show the "detached" Jacobian reconstruction, which perfectly matches the model output.
 
 ### What Makes It "Detached"?
 
