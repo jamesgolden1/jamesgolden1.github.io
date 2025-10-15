@@ -39,7 +39,7 @@ $$J = \begin{bmatrix} \frac{\partial f_1}{\partial x} & \frac{\partial f_1}{\par
 
 For deep neural networks with activation functions like SwiGLU or GELU, and operations like softmax attention, the regular Jacobian doesn't reconstruct the model output. The paper shows this clearly:
 
-![Reconstruction comparison](images/fig1-llama-detached-swiglu-sep24.pdf)
+![Reconstruction comparison](images/fig1-qwen3-reconstruction.png)
 
 The blue points show what happens when you use the regular Jacobian—it's way off! The red points show the "detached" Jacobian reconstruction, which perfectly matches the model output.
 
@@ -54,6 +54,8 @@ For example, the Swish activation is:
 $$\text{Swish}(x) = x \cdot \sigma(\beta x)$$
 
 The $\sigma(\beta x)$ part is nonlinear, but if we "freeze" it at its computed value during inference (using PyTorch's `.detach()` operation), we get a linear function that's valid at that specific input.
+
+![SwiGLU detached](images/fig1-llama-arch.png)
 
 The paper does this systematically for:
 1. **RMSNorm layers** - by detaching the variance term
@@ -70,7 +72,7 @@ $$y^* = \sum_{i=0}^{k} J^+_i(x^*) \cdot x^*_i$$
 
 Each input token gets its own detached Jacobian matrix $J^+_i$ that operates on its embedding vector. The sum of all these contributions gives you the output.
 
-![Sequence decomposition](images/fig3-sequence-llama32-june2.pdf)
+![Sequence decomposition](images/fig3-sequence-llama32-oct14.png)
 
 This figure shows the process for generating three tokens. For each prediction, you get one Jacobian matrix per input token, and they're all extremely low-rank (most singular values are tiny).
 
@@ -80,7 +82,7 @@ This figure shows the process for generating three tokens. For each prediction, 
 
 One of the most striking findings is that these Jacobian matrices are extremely low-rank. Look at the singular value spectra:
 
-![SVD analysis](images/fig5-svd-may19.pdf)
+![SVD analysis](images/fig5-svd-oct14.png)
 
 The singular values drop off dramatically after just the first few. This means that even though these models have thousands of dimensions in their embedding spaces, they're operating in much lower-dimensional subspaces for any given prediction.
 
@@ -94,7 +96,7 @@ When you decode the singular vectors back to tokens, you get interpretable seman
 - "highway", "exit"
 - "most", "only", "first"
 
-![Singular vector decoding](images/fig4-col-svd.pdf)
+![Singular vector decoding](images/fig4-col-svd-oct14.png)
 
 The right singular vectors (V) tell you which input features matter most, while the left singular vectors (U) tell you what outputs are being predicted.
 
@@ -102,7 +104,7 @@ The right singular vectors (V) tell you which input features matter most, while 
 
 By computing the detached Jacobian for each layer's output, we can watch how predictions emerge through the network:
 
-![Layer outputs](images/fig-6-aug16.pdf)
+![Layer outputs](images/fig-6-oct14.png)
 
 - **Early layers** produce gibberish when decoded
 - **Middle layers** (around layer 11 for Llama 3.2 3B) start to align with the final prediction
@@ -114,7 +116,7 @@ The dimensionality actually increases in the middle layers before compressing ag
 
 The paper compares Llama 3, Qwen 3, and Gemma 3 on 100 short phrases. Some fascinating differences emerge:
 
-![Rank comparison](images/fig-rank-100ex.pdf)
+![Rank comparison](images/fig-rank-100ex.png)
 
 **Llama 3** tends to have:
 - More abstract semantic concepts in secondary vectors
