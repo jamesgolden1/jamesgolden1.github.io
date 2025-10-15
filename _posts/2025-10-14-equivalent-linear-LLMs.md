@@ -204,8 +204,6 @@ You can:
 ---
 
 ## Further Reading
-
-- **Original paper**: "Equivalent Linear Mappings of Large Language Models" by James R. Golden
 - **Mathematical framework for transformers**: Elhage et al. (2021)
 - **Diffusion models as adaptive filters**: Kadkhodaie et al. (2023)
 - **Scaling monosemanticity**: Templeton et al. (2024)
@@ -213,7 +211,3 @@ You can:
 ---
 
 *This post provides an accessible introduction to a technical paper. For full mathematical details and additional experiments, see the original publication.*
-
----
-
-*This post provides an accessible introduction to a technical paper. For full mathematical details, proofs, and ad
