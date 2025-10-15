@@ -31,7 +31,7 @@ Linear systems are much easier to understand and analyze than nonlinear ones. On
 
 The Jacobian matrix is a fundamental tool from calculus that captures how a function changes. For a model that takes input vectors and produces output vectors, the Jacobian tells us how small changes to the input affect the output.
 
-For a simple function like $f(x, y) = (x^2 + y, xy)$ , the Jacobian would be a matrix of all the partial derivatives:
+For a simple function like \\(f(x, y) = (x^2 + y, xy)\\), the Jacobian would be a matrix of all the partial derivatives:
 
 $$J = \begin{bmatrix} \frac{\partial f_1}{\partial x} & \frac{\partial f_1}{\partial y} \\ \frac{\partial f_2}{\partial x} & \frac{\partial f_2}{\partial y} \end{bmatrix} = \begin{bmatrix} 2x & 1 \\ y & x \end{bmatrix}$$
 
@@ -45,15 +45,15 @@ The blue points show what happens when you use the regular Jacobian, not even cl
 
 ### What Makes It "Detached"?
 
-The clever trick is in how the gradient is computed. Modern LLMs have operations that can be written as $A(x) \cdot x$, where:
-- $A(x)$ is a matrix that depends on the input
-- $x$ is the input vector
+The clever trick is in how the gradient is computed. Modern LLMs have operations that can be written as \\(A(x) \cdot x\\), where:
+- \\(A(x)\\) is a matrix that depends on the input
+- \\(x\\) is the input vector
 
 For example, the Swish activation is:
 
 $$\text{Swish}(x) = x \cdot \sigma(\beta x)$$
 
-The $\sigma(\beta x)$ part is nonlinear, but if we "freeze" it at its computed value during inference (using PyTorch's `.detach()` operation), we get a linear function that's valid at that specific input.
+The \\(\sigma(\beta x)\\) part is nonlinear, but if we "freeze" it at its computed value during inference (using PyTorch's `.detach()` operation), we get a linear function that's valid at that specific input.
 
 ![SwiGLU detached](../images/fig1-llama-arch.png)
 
@@ -66,11 +66,11 @@ This creates an alternative gradient path through the network that is "pointwise
 
 ## The Linear System for a Sequence
 
-For an input sequence with tokens $t_0, t_1, \ldots, t_k$ mapped to embedding vectors $x_0, x_1, \ldots, x_k$, the predicted output embedding $y^*$ can be reconstructed as:
+For an input sequence with tokens \\(t_0, t_1, \ldots, t_k\\) mapped to embedding vectors \\(x_0, x_1, \ldots, x_k\\), the predicted output embedding \\(y^*\\) can be reconstructed as:
 
 $$y^* = \sum_{i=0}^{k} J^+_i(x^*) \cdot x^*_i$$
 
-Each input token gets its own detached Jacobian matrix $J^+_i$ that operates on its embedding vector. The sum of all these contributions gives you the output.
+Each input token gets its own detached Jacobian matrix \\(J^+_i\\) that operates on its embedding vector. The sum of all these contributions gives you the output.
 
 ![Sequence decomposition](../images/fig3-sequence-llama32-oct14.png)
 
@@ -86,7 +86,7 @@ One of the most striking findings is that these Jacobian matrices are extremely 
 
 The singular values drop off dramatically after just the first few. This means that even though these models have thousands of dimensions in their embedding spaces, they're operating in much lower-dimensional subspaces for any given prediction.
 
-The paper measures this using the "stable rank": $R = \frac{\sum_i S_i^2}{S_{\text{max}}^2}$, which is typically between 1 and 2 for the first token and still quite small for subsequent tokens.
+The paper measures this using the "stable rank": \\(R = \frac{\sum_i S_i^2}{S_{\text{max}}^2}\\), which is typically between 1 and 2 for the first token and still quite small for subsequent tokens.
 
 ### 2. Semantic Content in Singular Vectors
 
